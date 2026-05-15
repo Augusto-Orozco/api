@@ -1,12 +1,17 @@
 import User from "../models/users.model.js"
+import {hashPassword} from "../utils/hash.js"
+import jwt from "jsonwebtoken"
 
 export const login = async (req, res) => {
     const {username, password} = req.body
     const user = await User.findOne({username:username})
-    if (user && user.password === password ){
-        res.json({login:true, msg:"ok", user:user})
+    const salt = user.password.substring(0, process.env.SALT_SIZE)
+    const hashed = hashPassword(password, salt)
+    if (user && user.password === salt+hashed){
+        const token = jwt.sign({sub:user._id}, process.env.JWT, {expiresIn:"1h"})
+        res.json({login:true, msg:"ok", user:user, token:token})
     }
     else {
-        res.status(404).json({login:false, msg:"no ok", user:{}})
+        res.status(404).json({login:false, msg:"wrong", user:{}, token:""})
     }
 }
