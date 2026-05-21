@@ -11,11 +11,7 @@ const app = express()
 
 connectDB()
 
-app.use(cors({
-  origin: "https://front-end-api-self.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}))
+app.use(cors()) // Permitir todo temporalmente para diagnosticar
 app.use(express.json())
 app.use(morgan("dev"))
 
