@@ -1,7 +1,7 @@
-import crypyo from 'crypto';
+import crypto from 'crypto';
 
 export const getSalt = () => {
-    const size = process.env.SALT_SIZE || 16;
+    const size = parseInt(process.env.SALT_SIZE) || 16;
     return crypto.randomBytes(50).toString("base64url").substring(0, size);
 }
 

@@ -24,9 +24,8 @@ export const putUser =  async (req,res) => {
     const salt = getSalt()
     const hashed = hashPassword(password, salt)
     const user = await User.findByIdAndUpdate(req.params.id,
-        {name, username, password},
+        {name, username, password:hashed},
         {new: true}
-
     )
     res.json(user)
 
